@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "57427886443",
+    "project_id": "groupie-71b28",
+    "storage_bucket": "groupie-71b28.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:57427886443:android:e2a680f8e7022a75ac4c2e",
+        "android_client_info": {
+          "package_name": "com.example.groupie"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "57427886443-hquos57698n4cnk3lij53e8iksp1vrgr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLJlpIyixX_b3jjwi73yGX6r8TjhcxNsc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "57427886443-hquos57698n4cnk3lij53e8iksp1vrgr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
