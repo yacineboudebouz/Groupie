@@ -4,6 +4,7 @@ import 'package:groupie/firebase_options.dart';
 import 'package:groupie/helper/helper_function.dart';
 import 'package:groupie/pages/home.dart';
 import 'package:groupie/pages/login.dart';
+import 'package:groupie/shared/constants.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -42,7 +43,8 @@ class _MyAppState extends State<MyApp> {
         title: 'Flutter Demo',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          primaryColor: Constants.primaryColor,
+          colorScheme: ColorScheme.fromSeed(seedColor: Constants.primaryColor),
           useMaterial3: true,
         ),
         home: _isSignedIn ? const HomePage() : const LoginPage());
