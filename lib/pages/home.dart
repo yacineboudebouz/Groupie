@@ -18,8 +18,8 @@ class _HomePageState extends State<HomePage> {
       body: Center(
         child: ElevatedButton(
             onPressed: () {
-              setState(() async {
-                await authService.signOut();
+              setState(() {
+                authService.signOut();
               });
             },
             child: Text('Sign Out')),
