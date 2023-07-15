@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:groupie/helper/helper_function.dart';
 import 'package:groupie/service/database_service.dart';
+import 'package:groupie/widgets/widgets.dart';
 
 class AuthService {
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
@@ -39,12 +40,13 @@ class AuthService {
     }
   }
 
-  Future signOut() async {
+  Future signOut(context, page) async {
     try {
       await HelperFunctions.saveUserLoggedInStatus(false);
       await HelperFunctions.saveEmailSF('');
       await HelperFunctions.saveUserNameSF('');
       await firebaseAuth.signOut();
+      nextScreen(context, page);
     } catch (e) {
       return null;
     }

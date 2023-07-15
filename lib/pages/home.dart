@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:groupie/pages/login.dart';
 import 'package:groupie/service/auth_service.dart';
 
 class HomePage extends StatefulWidget {
@@ -17,10 +18,9 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       body: Center(
         child: ElevatedButton(
-            onPressed: () {
-              setState(() {
-                authService.signOut();
-              });
+            onPressed: () async {
+              await authService.signOut(context, LoginPage());
+              setState(() {});
             },
             child: Text('Sign Out')),
       ),
