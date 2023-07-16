@@ -45,6 +45,11 @@ class _MyAppState extends State<MyApp> {
         title: 'Flutter Demo',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
+          appBarTheme: const AppBarTheme(
+            iconTheme: IconThemeData(
+              color: Colors.white, // Change the color here
+            ),
+          ),
           primaryColor: Constants.primaryColor,
           colorScheme: ColorScheme.fromSeed(seedColor: Constants.primaryColor),
           useMaterial3: true,
