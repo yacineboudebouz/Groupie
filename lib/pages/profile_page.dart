@@ -1,25 +1,23 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:groupie/helper/helper_function.dart';
-import 'package:groupie/pages/login.dart';
-import 'package:groupie/pages/profile_page.dart';
-import 'package:groupie/pages/search_page.dart';
-import 'package:groupie/service/auth_service.dart';
-import 'package:groupie/widgets/widgets.dart';
+import 'package:groupie/pages/home.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+import '../helper/helper_function.dart';
+import '../service/auth_service.dart';
+import '../widgets/widgets.dart';
+import 'login.dart';
+
+class ProfilePage extends StatefulWidget {
+  const ProfilePage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<ProfilePage> createState() => _ProfilePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _ProfilePageState extends State<ProfilePage> {
   AuthService authService = AuthService();
   String _userName = '';
   String _email = '';
-
   @override
   void initState() {
     // TODO: implement initState
@@ -44,20 +42,11 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        actions: [
-          IconButton(
-              onPressed: () {
-                nextScreen(context, const SearchPage());
-              },
-              icon: const Icon(
-                Icons.search,
-              ))
-        ],
         backgroundColor: Theme.of(context).primaryColor,
         centerTitle: true,
         elevation: 1.0,
         title: const Text(
-          'Groups',
+          'Profile Page',
           style: TextStyle(
               fontWeight: FontWeight.bold, color: Colors.white, fontSize: 27),
         ),
@@ -82,9 +71,11 @@ class _HomePageState extends State<HomePage> {
               height: 2,
             ),
             ListTile(
-              onTap: () {},
+              onTap: () {
+                nextScreen(context, const HomePage());
+              },
               selectedColor: Theme.of(context).primaryColor,
-              selected: true,
+              selected: false,
               contentPadding:
                   const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
               leading: const Icon(Icons.group),
@@ -98,7 +89,7 @@ class _HomePageState extends State<HomePage> {
                 nextScreen(context, const ProfilePage());
               },
               selectedColor: Theme.of(context).primaryColor,
-              selected: false,
+              selected: true,
               contentPadding:
                   const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
               leading: const Icon(Icons.account_circle),
@@ -158,7 +149,6 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-      body: Center(),
     );
   }
 }

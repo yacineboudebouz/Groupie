@@ -40,13 +40,12 @@ class AuthService {
     }
   }
 
-  Future signOut(context, page) async {
+  Future signOut() async {
     try {
       await HelperFunctions.saveUserLoggedInStatus(false);
       await HelperFunctions.saveEmailSF('');
       await HelperFunctions.saveUserNameSF('');
       await firebaseAuth.signOut();
-      nextScreen(context, page);
     } catch (e) {
       return null;
     }
