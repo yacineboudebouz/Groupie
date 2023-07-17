@@ -85,68 +85,70 @@ class _HomePageState extends State<HomePage> {
             barrierDismissible: false,
             context: context,
             builder: (context) {
-              return AlertDialog(
-                title: const Text(
-                  'Create a group',
-                  textAlign: TextAlign.left,
-                ),
-                content: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    _isLoading
-                        ? Center(
-                            child: CircularProgressIndicator(
-                              color: Theme.of(context).primaryColor,
+              return StatefulBuilder(
+                builder: (context, setState) => AlertDialog(
+                  title: const Text(
+                    'Create a group',
+                    textAlign: TextAlign.left,
+                  ),
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      _isLoading
+                          ? Center(
+                              child: CircularProgressIndicator(
+                                color: Theme.of(context).primaryColor,
+                              ),
+                            )
+                          : TextField(
+                              onChanged: (value) {
+                                groupName = value;
+                              },
+                              decoration: textInputDecoration,
                             ),
-                          )
-                        : TextField(
-                            onChanged: (value) {
-                              groupName = value;
-                            },
-                            decoration: textInputDecoration,
-                          ),
+                    ],
+                  ),
+                  actions: [
+                    ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            primary: Theme.of(context).primaryColor),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text(
+                          'Cancel',
+                          style: TextStyle(color: Colors.white),
+                        )),
+                    ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            primary: Theme.of(context).primaryColor),
+                        onPressed: () async {
+                          if (groupName != "") {
+                            setState(() {
+                              _isLoading = true;
+                            });
+                            DatabaseService(
+                                    uid: FirebaseAuth.instance.currentUser!.uid)
+                                .createGroup(
+                                    _userName,
+                                    FirebaseAuth.instance.currentUser!.uid,
+                                    groupName)
+                                .whenComplete(() {
+                              setState(() {
+                                _isLoading = false;
+                              });
+                            });
+                            Navigator.of(context).pop();
+                            showSnackBar(context, Colors.green,
+                                "Group created successfully !");
+                          }
+                        },
+                        child: const Text(
+                          'Create',
+                          style: TextStyle(color: Colors.white),
+                        )),
                   ],
                 ),
-                actions: [
-                  ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          primary: Theme.of(context).primaryColor),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: const Text(
-                        'Cancel',
-                        style: TextStyle(color: Colors.white),
-                      )),
-                  ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          primary: Theme.of(context).primaryColor),
-                      onPressed: () async {
-                        if (groupName != "") {
-                          setState(() {
-                            _isLoading = true;
-                          });
-                          DatabaseService(
-                                  uid: FirebaseAuth.instance.currentUser!.uid)
-                              .createGroup(
-                                  _userName,
-                                  FirebaseAuth.instance.currentUser!.uid,
-                                  groupName)
-                              .whenComplete(() {
-                            setState(() {
-                              _isLoading = false;
-                            });
-                          });
-                          Navigator.of(context).pop();
-                          showSnackBar(context, Colors.green,
-                              "Group created successfully !");
-                        }
-                      },
-                      child: const Text(
-                        'Create',
-                        style: TextStyle(color: Colors.white),
-                      )),
-                ],
               );
             },
           );
