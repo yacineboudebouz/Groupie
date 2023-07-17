@@ -121,7 +121,27 @@ class _HomePageState extends State<HomePage> {
                   ElevatedButton(
                       style: ElevatedButton.styleFrom(
                           primary: Theme.of(context).primaryColor),
-                      onPressed: () {},
+                      onPressed: () async {
+                        if (groupName != "") {
+                          setState(() {
+                            _isLoading = true;
+                          });
+                          DatabaseService(
+                                  uid: FirebaseAuth.instance.currentUser!.uid)
+                              .createGroup(
+                                  _userName,
+                                  FirebaseAuth.instance.currentUser!.uid,
+                                  groupName)
+                              .whenComplete(() {
+                            setState(() {
+                              _isLoading = false;
+                            });
+                          });
+                          Navigator.of(context).pop();
+                          showSnackBar(context, Colors.green,
+                              "Group created successfully !");
+                        }
+                      },
                       child: const Text(
                         'Create',
                         style: TextStyle(color: Colors.white),
