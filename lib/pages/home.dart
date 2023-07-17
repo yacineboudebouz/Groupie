@@ -1,12 +1,16 @@
-import 'package:flutter/foundation.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+
 import 'package:groupie/helper/helper_function.dart';
-import 'package:groupie/pages/login.dart';
-import 'package:groupie/pages/profile_page.dart';
+
 import 'package:groupie/pages/search_page.dart';
 import 'package:groupie/service/auth_service.dart';
+import 'package:groupie/service/database_service.dart';
+import 'package:groupie/widgets/home/no_groups.dart';
 import 'package:groupie/widgets/widgets.dart';
+
+import '../widgets/home/drawer_home.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -19,6 +23,9 @@ class _HomePageState extends State<HomePage> {
   AuthService authService = AuthService();
   String _userName = '';
   String _email = '';
+  Stream? groups;
+  bool _isLoading = false;
+  String groupName = '';
 
   @override
   void initState() {
@@ -36,6 +43,13 @@ class _HomePageState extends State<HomePage> {
     await HelperFunctions.getUserName().then((value) {
       setState(() {
         _userName = value!;
+      });
+    });
+    await DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid)
+        .getUserGroups()
+        .then((snapshot) {
+      setState(() {
+        groups = snapshot;
       });
     });
   }
@@ -62,103 +76,94 @@ class _HomePageState extends State<HomePage> {
               fontWeight: FontWeight.bold, color: Colors.white, fontSize: 27),
         ),
       ),
-      drawer: Drawer(
-        child: ListView(
-          padding: const EdgeInsets.symmetric(vertical: 60),
-          children: [
-            const Icon(
-              Icons.account_circle,
-              size: 150,
-            ),
-            Text(
-              _userName,
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            const Divider(
-              height: 2,
-            ),
-            ListTile(
-              onTap: () {},
-              selectedColor: Theme.of(context).primaryColor,
-              selected: true,
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-              leading: const Icon(Icons.group),
-              title: const Text(
-                'Groups',
-                style: TextStyle(color: Colors.black),
-              ),
-            ),
-            ListTile(
-              onTap: () {
-                nextScreen(context, const ProfilePage());
-              },
-              selectedColor: Theme.of(context).primaryColor,
-              selected: false,
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-              leading: const Icon(Icons.account_circle),
-              title: const Text(
-                'Profile',
-                style: TextStyle(color: Colors.black),
-              ),
-            ),
-            ListTile(
-              onTap: () async {
-                showDialog(
-                    barrierDismissible: false,
-                    context: context,
-                    builder: (context) {
-                      return AlertDialog(
-                        title: const Text('Logout'),
-                        content:
-                            const Text('Are you sure you want to logout ?'),
-                        actions: [
-                          IconButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              icon: const Icon(
-                                Icons.cancel,
-                                color: Colors.red,
-                              )),
-                          IconButton(
-                              onPressed: () async {
-                                await authService.signOut().whenComplete(() {
-                                  Navigator.maybeOf(context)!
-                                      .pushAndRemoveUntil(
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const LoginPage()),
-                                          (route) => false);
-                                });
-                              },
-                              icon: const Icon(
-                                Icons.done,
-                                color: Colors.green,
-                              )),
-                        ],
-                      );
-                    });
-              },
-              selectedColor: Theme.of(context).primaryColor,
-              selected: false,
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-              leading: const Icon(Icons.logout),
-              title: const Text(
-                'Logout',
-                style: TextStyle(color: Colors.black),
-              ),
-            )
-          ],
+      drawer: DrawerHome(userName: _userName, authService: authService),
+      body: groupList(),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Theme.of(context).primaryColor,
+        onPressed: () {
+          showDialog(
+            barrierDismissible: false,
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: const Text(
+                  'Create a group',
+                  textAlign: TextAlign.left,
+                ),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _isLoading
+                        ? Center(
+                            child: CircularProgressIndicator(
+                              color: Theme.of(context).primaryColor,
+                            ),
+                          )
+                        : TextField(
+                            onChanged: (value) {
+                              groupName = value;
+                            },
+                            decoration: textInputDecoration,
+                          ),
+                  ],
+                ),
+                actions: [
+                  ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          primary: Theme.of(context).primaryColor),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text(
+                        'Cancel',
+                        style: TextStyle(color: Colors.white),
+                      )),
+                  ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          primary: Theme.of(context).primaryColor),
+                      onPressed: () {},
+                      child: const Text(
+                        'Create',
+                        style: TextStyle(color: Colors.white),
+                      )),
+                ],
+              );
+            },
+          );
+        },
+        child: const Icon(
+          Icons.add,
+          color: Colors.white,
+          size: 30,
         ),
       ),
-      body: Center(),
+    );
+  }
+
+  groupList() {
+    return StreamBuilder(
+      stream: groups,
+      builder: (context, AsyncSnapshot snapshot) {
+        if (snapshot.hasData) {
+          if (snapshot.data['groups'] != null) {
+            if (snapshot.data['groups'].length != 0) {
+              return Text('Hellooooooooo');
+            } else {
+              return const Center(child: NoGroups());
+            }
+          } else {
+            return const Center(
+              child: NoGroups(),
+            );
+          }
+        } else {
+          return Center(
+            child: CircularProgressIndicator(
+              color: Theme.of(context).primaryColor,
+            ),
+          );
+        }
+      },
     );
   }
 }
