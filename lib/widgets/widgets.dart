@@ -17,6 +17,10 @@ void nextScreen(context, page) {
       context, MaterialPageRoute(builder: (context) => page));
 }
 
+void nextScreenNotReplace(context, page) {
+  Navigator.push(context, MaterialPageRoute(builder: (context) => page));
+}
+
 void showSnackBar(context, color, message) {
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
     content: Text(
