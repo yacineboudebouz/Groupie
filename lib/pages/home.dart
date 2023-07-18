@@ -11,6 +11,7 @@ import 'package:groupie/widgets/home/no_groups.dart';
 import 'package:groupie/widgets/widgets.dart';
 
 import '../widgets/home/drawer_home.dart';
+import '../widgets/home/group_list_builder.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -77,7 +78,7 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       drawer: DrawerHome(userName: _userName, authService: authService),
-      body: groupList(),
+      body: GroupListBuilder(groups: groups),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Theme.of(context).primaryColor,
         onPressed: () {
@@ -159,33 +160,6 @@ class _HomePageState extends State<HomePage> {
           size: 30,
         ),
       ),
-    );
-  }
-
-  groupList() {
-    return StreamBuilder(
-      stream: groups,
-      builder: (context, AsyncSnapshot snapshot) {
-        if (snapshot.hasData) {
-          if (snapshot.data['groups'] != null) {
-            if (snapshot.data['groups'].length != 0) {
-              return Text('Hellooooooooo');
-            } else {
-              return const Center(child: NoGroups());
-            }
-          } else {
-            return const Center(
-              child: NoGroups(),
-            );
-          }
-        } else {
-          return Center(
-            child: CircularProgressIndicator(
-              color: Theme.of(context).primaryColor,
-            ),
-          );
-        }
-      },
     );
   }
 }
