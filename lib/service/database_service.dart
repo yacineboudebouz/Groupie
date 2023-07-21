@@ -17,6 +17,10 @@ class DatabaseService {
     });
   }
 
+  String getName(String res) {
+    return res.substring(res.indexOf("_") + 1);
+  }
+
   Future gettingUserData(String email) async {
     QuerySnapshot snapshot =
         await userCollection.where('email', isEqualTo: email).get();
@@ -48,5 +52,20 @@ class DatabaseService {
       "groups":
           FieldValue.arrayUnion(["${groupDocumentReference.id}_$groupName"])
     });
+  }
+
+  // getting the chat
+  getChat(String groupId) async {
+    return groupCollection
+        .doc(groupId)
+        .collection('messages')
+        .orderBy('time')
+        .snapshots();
+  }
+
+  Future getGroupAdmin(String groupId) async {
+    DocumentReference d = groupCollection.doc(groupId);
+    DocumentSnapshot documentSnapshot = await d.get();
+    return getName(documentSnapshot['admin']);
   }
 }
