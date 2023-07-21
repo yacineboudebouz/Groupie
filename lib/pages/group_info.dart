@@ -19,8 +19,14 @@ class _GroupPageState extends State<GroupPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Text(widget.adminName),
+      appBar: AppBar(
+        centerTitle: true,
+        elevation: 1,
+        title: const Text('Group Info'),
+        backgroundColor: Theme.of(context).primaryColor,
+        actions: [
+          IconButton(onPressed: () {}, icon: const Icon(Icons.exit_to_app))
+        ],
       ),
     );
   }

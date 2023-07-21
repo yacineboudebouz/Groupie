@@ -45,6 +45,7 @@ class _MyAppState extends State<MyApp> {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           appBarTheme: const AppBarTheme(
+            titleTextStyle: TextStyle(color: Colors.white, fontSize: 20),
             iconTheme: IconThemeData(
               color: Colors.white, // Change the color here
             ),
