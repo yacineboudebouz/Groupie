@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:groupie/service/database_service.dart';
 
+import '../widgets/group_info/group_members.dart';
 import '../widgets/group_info/header.dart';
 
 class GroupPage extends StatefulWidget {
@@ -58,33 +59,7 @@ class _GroupPageState extends State<GroupPage> {
               groupId: widget.groupId,
               groupName: widget.groupName,
             ),
-            StreamBuilder(
-                stream: members,
-                builder: (context, AsyncSnapshot snapshot) {
-                  if (snapshot.hasData) {
-                    if (snapshot.data['members'] != null) {
-                      if (snapshot.data['members'].length != 0) {
-                        return ListView.builder(
-                          itemBuilder: (context, index) {
-                            return Text(snapshot.data['members'][index]);
-                          },
-                          itemCount: snapshot.data['members'].length,
-                          shrinkWrap: true,
-                        );
-                      } else {
-                        return const Text('No Members');
-                      }
-                    } else {
-                      return const Text('No Members');
-                    }
-                  } else {
-                    return Center(
-                      child: CircularProgressIndicator(
-                        color: Theme.of(context).primaryColor,
-                      ),
-                    );
-                  }
-                })
+            GroupMembers(members: members)
           ],
         ),
       ),
