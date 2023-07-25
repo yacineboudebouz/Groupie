@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:groupie/helper/helper_function.dart';
@@ -104,7 +104,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               : "Please enter a valid email";
                         },
                       ),
-                      SizedBox(
+                     const  SizedBox(
                         height: 10,
                       ),
                       TextFormField(
@@ -128,7 +128,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                   _isShowen = !_isShowen;
                                 });
                               },
-                              icon: Icon(Icons.remove_red_eye)),
+                              icon:const  Icon(Icons.remove_red_eye)),
                           floatingLabelStyle:
                               TextStyle(color: Theme.of(context).primaryColor),
                           labelText: 'Password',
@@ -150,7 +150,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               register();
                             },
                             child: const Text(
-                              'Test',
+                              'Register',
                               style: TextStyle(color: Colors.white),
                             )),
                       ),
@@ -159,11 +159,11 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                       Text.rich(TextSpan(
                           text: "Have account ?",
-                          style: TextStyle(color: Colors.black, fontSize: 14),
+                          style: const  TextStyle(color: Colors.black, fontSize: 14),
                           children: [
                             TextSpan(
                                 text: "Login here",
-                                style: TextStyle(
+                                style: const  TextStyle(
                                     color: Colors.blue,
                                     decoration: TextDecoration.underline),
                                 recognizer: TapGestureRecognizer()
@@ -191,7 +191,8 @@ class _RegisterPageState extends State<RegisterPage> {
           await HelperFunctions.saveUserLoggedInStatus(true);
           await HelperFunctions.saveEmailSF(email);
           await HelperFunctions.saveUserNameSF(fullName);
-          nextScreen(context, HomePage());
+          // ignore: use_build_context_synchronously
+          nextScreen(context, const HomePage());
           // setting shared state
         } else {
           showSnackBar(context, Colors.red, value);
