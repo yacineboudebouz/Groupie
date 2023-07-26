@@ -3,8 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:groupie/service/database_service.dart';
+import 'package:groupie/widgets/widgets.dart';
 
 import '../helper/helper_function.dart';
+import 'chat_page.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -174,7 +176,30 @@ class _SearchPageState extends State<SearchPage> {
         ),
       ),
       trailing: InkWell(
-          onTap: () async {},
+          onTap: () async {
+            await DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid)
+                .toggleGroupJoin(groupId, userName, groupName);
+            if (!isJoined) {
+              setState(() {
+                isJoined = !isJoined;
+              });
+              showSnackBar(
+                  context, Colors.green, "Successfully joined he group");
+              Future.delayed(const Duration(seconds: 2), () {
+                nextScreen(
+                    context,
+                    ChatPage(
+                        groupId: groupId,
+                        groupName: groupName,
+                        userName: userName));
+              });
+            } else {
+              setState(() {
+                isJoined = !isJoined;
+                showSnackBar(context, Colors.red, "Left the group $groupName");
+              });
+            }
+          },
           child: isJoined
               ? Container(
                   decoration: BoxDecoration(
